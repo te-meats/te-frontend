@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@hooks/hooks"
-import { Home, Person } from "@mui/icons-material";
+import { Home, Person, PostAdd } from "@mui/icons-material";
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -28,6 +28,17 @@ const SideBar = () => {
                     <ListItemText
                         primary="Customers"
                         onClick={() => navigate('/customers')}
+                    />
+                </ListItemButton>
+            </ListItem>
+            <ListItem>
+                <ListItemButton>
+                    <ListItemIcon>
+                        <PostAdd />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary="Cutting Instructions"
+                        onClick={() => navigate('/cutting-instructions')}
                     />
                 </ListItemButton>
             </ListItem>

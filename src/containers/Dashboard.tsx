@@ -1,5 +1,6 @@
 import SideBar from '@components/Nav/SideBar';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2'
 import { ReactNode } from 'react';
 
 type Props = {
@@ -9,10 +10,10 @@ type Props = {
 const Dashboard = ({ component } : Props) => {
     return (
         <Grid container>
-            <Grid >
+            <Grid xs={12} md={2}>
                 <SideBar />
             </Grid>
-            <Grid>
+            <Grid xs={12} md={10}>
                 <Box>
                     {component}
                 </Box>

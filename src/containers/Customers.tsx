@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@hooks/hooks"
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { fetchCustomers } from "@actions/customers";
+import Header from "@components/Header";
 
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -23,13 +24,18 @@ const Customers = () => {
     }, [])
 
     return (
-        <DataGrid 
-            rows={customers}
-            columns={columns}
-            checkboxSelection
-            loading={customersLoading}
-            autoHeight={true}
-        />
+        <>
+            <Header
+                title="Customers"
+            />
+            <DataGrid 
+                rows={customers}
+                columns={columns}
+                checkboxSelection
+                loading={customersLoading}
+                autoHeight={true}
+            />
+        </>
     )
 }
 

@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 import PrivateRoutes from '@utils/PrivateRoutes';
 import Dashboard from '@containers/Dashboard';
 import Home from '@containers/Home';
+import CuttingInstructions from '@containers/CuttingInstructions';
 
 function App() {
 
@@ -16,6 +17,12 @@ function App() {
             path="/home"
             element={
               <Dashboard component={<Home />} />
+            }
+          />
+          <Route 
+            path="/cutting-instructions"
+            element={
+              <Dashboard component={<CuttingInstructions />} />
             }
           />
           <Route 
