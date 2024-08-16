@@ -28,6 +28,7 @@ const Customers = () => {
             columns={columns}
             checkboxSelection
             loading={customersLoading}
+            autoHeight={true}
         />
     )
 }
