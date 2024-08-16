@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@actions/": ["./src/actions"],
+      "@actions/*": ["./src/actions/*"],
+      "@reducers": ["./src/reducers"],
+      "@reducers/*": ["./src/reducers/*"],
+      "@components": ["./src/components"],
+      "@components/*": ["./src/components/*"],
+      "@containers": ["./src/containers"],
+      "@containers/*": ["./src/containers/*"],
+      "@hooks": ["./src/hooks"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@utils": ["./src/utils"],
+      "@utils/*": ["./src/utils/*"],
+    }
+  },
+  "include": ["./src/**/*.js", "./src/**/*.jsx", "./src/**/*.ts", "./src/**/*.tsx",]
+}
