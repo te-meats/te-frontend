@@ -1,16 +1,17 @@
 import Login from '@containers/Login'
 import Customers from '@containers/Customers';
-import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import PrivateRoutes from '@utils/PrivateRoutes';
 import Dashboard from '@containers/Dashboard';
 import Home from '@containers/Home';
 import CuttingInstructions from '@containers/CuttingInstructions';
+import Users from '@containers/Users';
+import '@assets/App.scss'
 
 function App() {
 
   return (
-    <>
+    <div className="container">
       <Routes>
         <Route element={<PrivateRoutes />}>
           <Route 
@@ -31,10 +32,16 @@ function App() {
               <Dashboard component={<Customers />} />
             }
           />
+          <Route 
+            path="/users"
+            element={
+              <Dashboard component={<Users />} />
+            }
+          />
         </Route>
         <Route path="/" element={<Login />} />
       </Routes>
-    </>
+    </div>
   )
 }
 

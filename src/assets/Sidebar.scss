@@ -1,0 +1,15 @@
+@import 'App.scss';
+
+$headerFontSize: 2.4em;
+
+h2 {
+    font-size: $headerFontSize;
+    text-align: center;
+    background-color: $secondaryColor;
+    margin: 0;
+}
+
+.sidebar-header {
+    background-color: $primaryColor;
+    height: 100%;
+}

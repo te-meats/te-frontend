@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@hooks/hooks"
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { fetchCustomers } from "@actions/customers";
 import Header from "@components/Header";
+import { Box } from "@mui/material";
 
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -21,20 +22,29 @@ const Customers = () => {
 
     useEffect(() => {
         dispatch(fetchCustomers());
-    }, [])
+    }, []);
+
+    const addCustomerHandler = () => {
+        // TODO: Implement functionality
+        console.log("added new customer");
+    };
 
     return (
         <>
             <Header
                 title="Customers"
+                actionTitle="Add new Customer"
+                actions={addCustomerHandler}
             />
-            <DataGrid 
-                rows={customers}
-                columns={columns}
-                checkboxSelection
-                loading={customersLoading}
-                autoHeight={true}
-            />
+            <Box className="container-content">
+                <DataGrid 
+                    rows={customers}
+                    columns={columns}
+                    checkboxSelection
+                    loading={customersLoading}
+                    autoHeight={true}
+                />
+            </Box>
         </>
     )
 }
