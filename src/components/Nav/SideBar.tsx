@@ -1,11 +1,9 @@
-import { useAppDispatch } from "@hooks/hooks"
-import { Home, Person, PostAdd, Settings, SettingsAccessibility } from "@mui/icons-material";
+import { Home, Person, PostAdd, Settings } from "@mui/icons-material";
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import '@assets/Sidebar.scss';
 
 const SideBar = () => {
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     return (

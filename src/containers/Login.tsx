@@ -23,6 +23,7 @@ const Login = () => {
     };
 
     const handleLogin = () => {
+        dispatch(authenticateUser(config));
         navigate('/home');
     }
 
@@ -56,7 +57,6 @@ const Login = () => {
                     onChange={handleChange}
                 />
                 <Button 
-                    // onClick={() => dispatch(authenticateUser(config))}
                     onClick={handleLogin}
                 >
                         Sign In
