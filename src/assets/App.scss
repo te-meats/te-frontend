@@ -1,0 +1,14 @@
+$primaryColor: #f0dfdc;
+$secondaryColor: #daaea6;
+$alternatePrimaryColor: #ffece0;
+$alternateSecondaryColor: #ffffff;
+
+body {
+    margin: 0;
+}
+
+.container-content {
+    background-color: $alternateSecondaryColor;
+    padding: 2.4rem;
+    height: 100vh;
+}

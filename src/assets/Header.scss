@@ -1,0 +1,14 @@
+@import 'App.scss';
+
+.header {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    padding-left: 30px;
+    background-color: $alternatePrimaryColor;
+
+    h1 {
+        font-size: 3.2em;
+    }
+}

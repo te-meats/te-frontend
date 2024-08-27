@@ -1,11 +1,24 @@
+import { useAppSelector } from "@hooks/hooks";
+import { CircularProgress } from "@mui/material";
+import { useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
+import { authApi } from "./api";
 
 const PrivateRoutes = () => {
-    // TODO: Add authentication when user logs in
-    const auth = { 'token': true };
+    const loading = useAppSelector(state => state.user.pending);
+    const token = localStorage.getItem('token');
+
+    // Set token to make authorized api calls
+    useEffect(() => {
+        if (token) {
+            authApi.defaults.headers.Authorization = `Token ${token}`
+        }
+    }, [token, loading])
 
     return (
-        auth.token ? <Outlet /> : <Navigate to="/"/>
+        loading 
+            ? <CircularProgress />
+            : token ? <Outlet /> : <Navigate to="/" />
     );
 }
 

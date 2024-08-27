@@ -1,10 +1,11 @@
 import { authenticateUser } from '@actions/user';
-import { createSlice } from '@reduxjs/toolkit'
-import { RootState } from 'src/store';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Auth, AuthState } from 'src/interfaces';
 
-const initialState = {
+const initialState: AuthState = {
+    users: [],
     pending: false,
-    error: null,
+    error: '',
 };
 
 const userSlice = createSlice({
@@ -13,7 +14,7 @@ const userSlice = createSlice({
     reducers: {
         reset: state => {
             state.pending = false;
-            state.error = null;
+            state.error = '';
         },
     },
 
@@ -22,15 +23,14 @@ const userSlice = createSlice({
             .addCase(authenticateUser.pending, state => {
                 state.pending = true;
             })
-            .addCase(authenticateUser.fulfilled, (state, action) => {
+            .addCase(authenticateUser.fulfilled, (state, action: PayloadAction<Auth>) => {
                 state.pending = false;
+                localStorage.setItem("token", action.payload.token)
             })
             .addCase(authenticateUser.rejected, (state, action) => {
                 state.pending = false;
             })
     }
 });
-
-export const userConfig = (state: RootState) => state.count.value;
 
 export default userSlice;

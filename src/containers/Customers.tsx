@@ -1,8 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@hooks/hooks"
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { fetchCustomers } from "@actions/customers";
 import Header from "@components/Header";
+import { Box } from "@mui/material";
+import PrimaryModal from "@components/Modals/PrimaryModal";
+import AddCustomer from "./Forms/AddCustomer";
 
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -19,21 +22,39 @@ const Customers = () => {
     const customersLoading = useAppSelector(state => state.customers.pending);
     const customers = useAppSelector(state => state.customers.customers);
 
+    const [modalOpen, setModalOpen] = useState(false);
+
     useEffect(() => {
         dispatch(fetchCustomers());
-    }, [])
+    }, []);
+
+    const addCustomerHandler = () => {
+        // TODO: Implement functionality
+        setModalOpen(true);
+    };
 
     return (
         <>
             <Header
                 title="Customers"
+                actionTitle="Add new Customer"
+                actions={addCustomerHandler}
             />
-            <DataGrid 
-                rows={customers}
-                columns={columns}
-                checkboxSelection
-                loading={customersLoading}
-                autoHeight={true}
+            <Box className="container-content">
+                <DataGrid 
+                    rows={customers}
+                    columns={columns}
+                    checkboxSelection
+                    loading={customersLoading}
+                    autoHeight={true}
+                />
+            </Box>
+            <PrimaryModal
+                title={"Add Customer"}
+                modalOpened={modalOpen}
+                setModalOpen={setModalOpen}
+                onSubmit={() => {}}
+                children={<AddCustomer />}
             />
         </>
     )

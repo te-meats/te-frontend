@@ -22,6 +22,8 @@
 
     "baseUrl": ".",
     "paths": {
+      "@assets/": ["./src/assets"],
+      "@assets/*": ["./src/assets/*"],
       "@actions/": ["./src/actions"],
       "@actions/*": ["./src/actions/*"],
       "@reducers": ["./src/reducers"],

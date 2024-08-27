@@ -1,24 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { unAuthApi } from "@utils/api";
 import { LoginConfig } from "src/interfaces";
 
 export const authenticateUser = createAsyncThunk(
     'user/authenticate',
     async (config: LoginConfig) => {
+        const response = await unAuthApi.post(`api-token-auth/`, {
+            username: config.username,
+            password: config.password,
+        });
 
-        console.log(config.username);
-        console.log(config.password);
+        const auth = response.data;
 
-        fetch('http://127.0.0.1:8000/users/', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data);
-        })
-
-        return {};
+        return auth;
     },
 );
