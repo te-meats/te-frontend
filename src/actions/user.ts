@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import api from "@utils/api";
+import { unAuthApi } from "@utils/api";
 import { LoginConfig } from "src/interfaces";
 
 export const authenticateUser = createAsyncThunk(
     'user/authenticate',
     async (config: LoginConfig) => {
-        const response = await api.post(`api-token-auth/`, {
+        const response = await unAuthApi.post(`api-token-auth/`, {
             username: config.username,
             password: config.password,
         });

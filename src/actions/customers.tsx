@@ -1,15 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import api from "@utils/api";
+import { authApi } from "@utils/api";
 
 export const fetchCustomers = createAsyncThunk(
     'customers/fetch',
     async () => {
-        const config = {
-            headers: { 'Authorization': `Token ${localStorage.getItem("token")}`}
-        }
-        const response = await api.get(
+        const response = await authApi.get(
             `customers/`,
-            config,
         );
 
         return response.data;

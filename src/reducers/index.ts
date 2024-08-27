@@ -1,8 +1,10 @@
 import { combineReducers } from "redux";
 import userSlice from "./user";
 import customersSlice from "./customers";
+import usersSlice from "./users";
 
 export default combineReducers({
-    user: userSlice.reducer,
     customers: customersSlice.reducer,
+    user: userSlice.reducer,
+    users: usersSlice.reducer,
 })

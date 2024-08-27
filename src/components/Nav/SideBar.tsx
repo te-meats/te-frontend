@@ -1,4 +1,4 @@
-import { Home, Person, PostAdd, Settings } from "@mui/icons-material";
+import { Home, Logout, Person, PostAdd, Settings } from "@mui/icons-material";
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import '@assets/Sidebar.scss';
@@ -55,6 +55,20 @@ const SideBar = () => {
                         <ListItemText
                             primary="User Management"
                             onClick={() => navigate('/users')}
+                        />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <Logout />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary="Logout"
+                            onClick={() => {
+                                localStorage.removeItem("token");
+                                navigate('/');
+                            }}
                         />
                     </ListItemButton>
                 </ListItem>

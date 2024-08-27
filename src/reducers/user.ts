@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Auth, AuthState } from 'src/interfaces';
 
 const initialState: AuthState = {
+    users: [],
     pending: false,
     error: '',
 };

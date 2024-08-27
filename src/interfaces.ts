@@ -1,18 +1,36 @@
 export interface UserConfig {
-    username: String,
-    email: String,
+    username: string,
+    email: string,
 }
 
 export interface LoginConfig {
-    username: String,
-    password: String,
+    username: string,
+    password: string,
 }
 
 export interface Auth {
-    token: string
+    token: string,
+}
+
+export interface UserState {
+    id: number,
+    username: string,
+    email: string,
+    first_name: string,
+    last_name: string,
 }
 
 export interface AuthState {
+    users: Array<UserState>
     pending: boolean,
-    error: String,
+    error: string,
+}
+
+export interface CreateUserConfig {
+    username: string,
+    password: string,
+}
+
+export interface UserFormData {
+    setUserConfig: React.Dispatch<React.SetStateAction<CreateUserConfig>>,
 }
