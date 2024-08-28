@@ -4,14 +4,14 @@ import { ReactNode } from "react";
 type ModalProps = {
     title: string,
     modalOpened: boolean,
-    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>
-    onSubmit: VoidFunction,
+    onClose: () => void, 
+    onSubmit: () => void,
     children: ReactNode,
 }
 
-const PrimaryModal = ({ title, modalOpened, setModalOpen, onSubmit, children }: ModalProps) => {
+const PrimaryModal = ({ title, modalOpened, onClose, onSubmit, children }: ModalProps) => {
     return (
-        <Dialog open={modalOpened} onClose={() => setModalOpen(false)}>
+        <Dialog open={modalOpened} onClose={() => onClose()}>
           <DialogTitle>
             {title}
           </DialogTitle>
@@ -19,7 +19,7 @@ const PrimaryModal = ({ title, modalOpened, setModalOpen, onSubmit, children }: 
             {children}
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setModalOpen(false)}>Cancel</Button>
+            <Button onClick={() => onClose()}>Cancel</Button>
             <Button onClick={() => onSubmit()}>Submit</Button>
           </DialogActions>
         </Dialog>

@@ -33,6 +33,10 @@ const Customers = () => {
         setModalOpen(true);
     };
 
+    const onClose = () => {
+        setModalOpen(false);
+    }
+
     return (
         <>
             <Header
@@ -52,7 +56,7 @@ const Customers = () => {
             <PrimaryModal
                 title={"Add Customer"}
                 modalOpened={modalOpen}
-                setModalOpen={setModalOpen}
+                onClose={onClose}
                 onSubmit={() => {}}
                 children={<AddCustomer />}
             />

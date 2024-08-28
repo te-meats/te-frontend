@@ -1,23 +1,11 @@
 import { Box, TextField } from "@mui/material";
-import { useState } from "react";
-import { CreateUserConfig, UserFormData } from "src/interfaces";
+import { UserFormData } from "src/interfaces";
 
-const AddUser = ({ setUserConfig }: UserFormData) => {
-    const [user, setUser] = useState<CreateUserConfig>({
-        username: '',
-        password: '',
-    })
-
+const AddUser = ({ userConfig, setUserConfig }: UserFormData) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUser({
-            ...user,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleBlur = () => {
         setUserConfig({
-            ...user,
+            ...userConfig,
+            [e.target.name]: e.target.value,
         });
     };
 
@@ -25,17 +13,15 @@ const AddUser = ({ setUserConfig }: UserFormData) => {
         <Box>
             <TextField 
                 name="username"
-                value={user.username}
+                value={userConfig.username}
                 label="Username"
                 onChange={handleChange}
-                onBlur={handleBlur}
             />
             <TextField 
                 name="password"
-                value={user.password}
+                value={userConfig.password}
                 label="Password"
                 onChange={handleChange}
-                onBlur={handleBlur}
             />
         </Box>
     );
