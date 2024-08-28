@@ -1,4 +1,4 @@
-import { Home, Logout, Person, PostAdd, Settings } from "@mui/icons-material";
+import { CalendarMonth, Home, Logout, Person, PostAdd, Settings } from "@mui/icons-material";
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import '@assets/Sidebar.scss';
@@ -22,6 +22,17 @@ const SideBar = () => {
                         <ListItemText
                             primary="Home"
                             onClick={() => navigate('/home')}
+                        />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <CalendarMonth />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary="Scheduler"
+                            onClick={() => navigate('/scheduler')}
                         />
                     </ListItemButton>
                 </ListItem>

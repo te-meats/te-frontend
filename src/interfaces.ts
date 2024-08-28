@@ -32,5 +32,6 @@ export interface CreateUserConfig {
 }
 
 export interface UserFormData {
+    userConfig: CreateUserConfig,
     setUserConfig: React.Dispatch<React.SetStateAction<CreateUserConfig>>,
 }

@@ -7,6 +7,7 @@ import Home from '@containers/Home';
 import CuttingInstructions from '@containers/CuttingInstructions';
 import Users from '@containers/Users';
 import '@assets/App.scss'
+import Calendar from '@containers/Calendar';
 
 function App() {
 
@@ -18,6 +19,12 @@ function App() {
             path="/home"
             element={
               <Dashboard component={<Home />} />
+            }
+          />
+          <Route 
+            path="/scheduler"
+            element={
+              <Dashboard component={<Calendar />} />
             }
           />
           <Route 

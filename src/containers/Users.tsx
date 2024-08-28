@@ -4,7 +4,7 @@ import PrimaryModal from "@components/Modals/PrimaryModal";
 import { useAppDispatch, useAppSelector } from "@hooks/hooks";
 import { Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CreateUserConfig } from "src/interfaces";
 import AddUser from '@containers/Forms/AddUser'
 
@@ -46,28 +46,44 @@ const Users = () => {
         password: '',
     });
 
+    const onClose = () => {
+        setUserConfig({
+            username: '',
+            password: '',
+        });
+        setModalOpen(false);
+    }
+
+    const UserList = useCallback(() => {
+        return (
+            <>
+                <Header
+                    title="Manage Users"
+                    actionTitle="Add New User"
+                    actions={() => setModalOpen(true)}
+                />
+                <Box className="container-content">
+                    <DataGrid 
+                        rows={users}
+                        columns={columns}
+                        checkboxSelection
+                        loading={usersLoading}
+                        autoHeight={true}
+                    />
+                </Box>
+            </>
+        )
+    }, [users, usersLoading]);
+
     return (
         <>
-            <Header
-                title="Manage Users"
-                actionTitle="Add New User"
-                actions={() => setModalOpen(true)}
-            />
-            <Box className="container-content">
-                <DataGrid 
-                    rows={users}
-                    columns={columns}
-                    checkboxSelection
-                    loading={usersLoading}
-                    autoHeight={true}
-                />
-            </Box>
+            <UserList />
             <PrimaryModal
                 title={"Add User"}
                 modalOpened={modalOpen}
-                setModalOpen={setModalOpen}
+                onClose={onClose}
                 onSubmit={addUserHandler}
-                children={<AddUser setUserConfig={setUserConfig} />}
+                children={<AddUser userConfig={userConfig} setUserConfig={setUserConfig} />}
             />
         </>
     );
