@@ -20,7 +20,7 @@ export const createUser = createAsyncThunk(
     async (config: CreateUserConfig) => {
         const response = await authApi.post(
             `users/`,
-            config
+            config,
         );
 
         const users = response.data;
@@ -34,7 +34,7 @@ export const updateUser = createAsyncThunk(
     async (config: UpdateUserConfig) => {
         const response = await authApi.put(
             `users/${config.id}`,
-            config
+            config,
         );
 
         const users = response.data;
@@ -48,7 +48,7 @@ export const updatePassword = createAsyncThunk(
     async (config: UpdateUserPassword) => {
         const response = await authApi.put(
             `users/updatePassword`,
-            config
+            config,
         );
 
         const users = response.data;

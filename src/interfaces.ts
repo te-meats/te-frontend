@@ -12,6 +12,36 @@ export interface Auth {
     token: string,
 }
 
+export interface Customer {
+    id: string,
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string,
+}
+
+export interface CreateCustomerConfig {
+    id: string,
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string,
+}
+
+export interface UpdateCustomerConfig {
+    id: string,
+    first_name?: string,
+    last_name?: string,
+    email?: string,
+    phone?: string,
+}
+
+export interface CustomerState {
+    customers: Array<Customer>,
+    pending: boolean,
+    error: string,
+}
+
 export interface UserState {
     id: string,
     username: string,
