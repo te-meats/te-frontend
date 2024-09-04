@@ -1,4 +1,4 @@
-import { createUser, fetchUsers } from '@actions/users';
+import { createUser, deleteUser, fetchUsers, updateUser } from '@actions/users';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AuthState, UserState } from 'src/interfaces';
 
@@ -40,9 +40,39 @@ const usersSlice = createSlice({
                 state.users = [
                     ...state.users,
                     action.payload
-                ]
+                ];
             })
             .addCase(createUser.rejected, (state, action) => {
+                state.pending = false;
+            })
+
+            .addCase(updateUser.pending, state => {
+                state.pending = true;
+            })
+            .addCase(updateUser.fulfilled, (state, action: PayloadAction<UserState>) => {
+                state.pending = false;
+                const index = state.users.findIndex(user => user.id === action.payload.id);
+                const newUserList = [
+                    ...state.users
+                ];
+
+                newUserList[index] = action.payload;
+                state.users = [
+                    ...newUserList,
+                ];
+            })
+            .addCase(updateUser.rejected, (state, action) => {
+                state.pending = false;
+            })
+
+            .addCase(deleteUser.pending, state => {
+                state.pending = true;
+            })
+            .addCase(deleteUser.fulfilled, (state, { meta }) => {
+                state.users = state.users.filter((user) => user.id !== meta.arg.id)
+                state.pending = false;
+            })
+            .addCase(deleteUser.rejected, (state, action) => {
                 state.pending = false;
             })
     }

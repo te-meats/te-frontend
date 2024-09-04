@@ -1,90 +1,169 @@
-import { createUser, fetchUsers } from "@actions/users";
+import { createUser, deleteUser, fetchUsers, updateUser } from "@actions/users";
 import Header from "@components/Header";
-import PrimaryModal from "@components/Modals/PrimaryModal";
 import { useAppDispatch, useAppSelector } from "@hooks/hooks";
-import { Box } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useCallback, useEffect, useState } from "react";
-import { CreateUserConfig } from "src/interfaces";
-import AddUser from '@containers/Forms/AddUser'
+import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, TextField, Tooltip } from "@mui/material";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { UserState } from "src/interfaces";
+import { MaterialReactTable, MRT_EditActionButtons, MRT_EditCellTextField, MRT_Row, MRT_TableOptions, useMaterialReactTable, type MRT_ColumnDef } from "material-react-table";
+import { Delete, Edit } from "@mui/icons-material";
 
 const Users = () => {
     const dispatch = useAppDispatch();
 
-    const [modalOpen, setModalOpen] = useState(false);
-
-    const addUserHandler = () => {
-        dispatch(createUser(userConfig));
-        clearState();
-        setModalOpen(false);
+    const handleCreateUser: MRT_TableOptions<UserState>['onCreatingRowSave'] = ({ values, table }) => {
+        dispatch(createUser(values));
+        table.setCreatingRow(null);
     };
 
-    const clearState = () => {
-        setUserConfig({
-            username: '',
-            password: '',
-        });
-    }
+    const handleEditUser: MRT_TableOptions<UserState>['onEditingRowSave'] = ({ values, table }) => {
+        dispatch(updateUser(values))
+        table.setEditingRow(null);
+    };
+
+    const handleDeleteUser = (row: MRT_Row<UserState>) => {
+        dispatch(deleteUser(row));
+    }  
 
     useEffect(() => {
         dispatch(fetchUsers());
-    }, []);
-
-    const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'username', headerName: 'Username', width: 130 },
-        { field: 'first_name', headerName: 'First Name', width: 130 },
-        { field: 'last_name', headerName: 'Last Name', width: 130 },
-        { field: 'groups', headerName: 'Permissions', width: 200 },
-    ]
+    }, [dispatch]);
 
     const usersLoading = useAppSelector(state => state.users.pending);
     const users = useAppSelector(state => state.users.users);
 
-    const [userConfig, setUserConfig] = useState<CreateUserConfig>({
-        username: '',
-        password: '',
-    });
+    const columns = useMemo<MRT_ColumnDef<UserState>[]>(() => [
+        {
+            accessorKey: 'id',
+            header: 'Id',
+            enableEditing: false,
+            visibleInShowHideMenu: false,
+        },
+        {
+            accessorKey: 'username',
+            header: 'Username',
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'password',
+            header: 'Password',
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'first_name',
+            header: 'First Name',
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'last_name',
+            header: 'Last Name',
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'email',
+            header: 'Email',
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'phone_number',
+            header: 'Phone Number',
+            enableHiding: false,
+        },
+    ], [])
 
-    const onClose = () => {
-        setUserConfig({
-            username: '',
-            password: '',
-        });
-        setModalOpen(false);
-    }
+    const table = useMaterialReactTable({
+        columns,
+        data: users,
+        enableGlobalFilter: true,
+        createDisplayMode: 'modal',
+        editDisplayMode: 'modal',
+        enableRowActions: true,
+        positionActionsColumn: 'last',
+        onCreatingRowSave: handleCreateUser,
+        onEditingRowSave: handleEditUser,
+        getRowId: (row) => row.id,
+        renderRowActions: ({ row, table }) => (
+            <Box sx={{ display: 'flex', gap: '1rem' }}>
+                <Tooltip title="Edit">
+                    <IconButton onClick={() => table.setEditingRow(row)}>
+                        <Edit />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete">
+                    <IconButton onClick={() => handleDeleteUser(row)}>
+                        <Delete />
+                    </IconButton>
+                </Tooltip>
+            </Box> 
+        ),
+        renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
+            <>
+                <DialogTitle variant="h3">Create New User</DialogTitle>
+                <DialogContent
+                    sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+                >
+                    {internalEditComponents}
+                </DialogContent>
+                <DialogActions>
+                    <MRT_EditActionButtons variant="text" table={table} row={row} />
+                </DialogActions>
+            </>
+        ),
+        renderEditRowDialogContent: ({ table, row }) => {
+            return (
+            <>
+                <DialogTitle variant="h3">Edit User</DialogTitle>
+                <DialogContent
+                    sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+                >
+                    {
+                        row.getAllCells()
+                        .filter((cell) => cell.column.id !== 'password')
+                        .map((cell) => (
+                            <MRT_EditCellTextField 
+                                cell={cell}
+                                key={cell.id}
+                                table={table}
+                            />
+                        ))
+                    }
+                </DialogContent>
+                <DialogActions>
+                    <MRT_EditActionButtons variant="text" table={table} row={row} />
+                </DialogActions>
+            </>
+        )},
+        renderTopToolbarCustomActions: ({ table }) => (
+            <Button
+                variant="contained"
+                onClick={() => {
+                    table.setCreatingRow(true);
+                }}
+            >
+                Create New User
+            </Button>
+        ),
+        state: {
+            columnVisibility: { id: false, password: false } ,
+            isLoading: usersLoading,
+        }
+    });
 
     const UserList = useCallback(() => {
         return (
-            <>
-                <Header
-                    title="Manage Users"
-                    actionTitle="Add New User"
-                    actions={() => setModalOpen(true)}
+            <Box className="container-content">
+                <MaterialReactTable 
+                    table={table}
                 />
-                <Box className="container-content">
-                    <DataGrid 
-                        rows={users}
-                        columns={columns}
-                        checkboxSelection
-                        loading={usersLoading}
-                        autoHeight={true}
-                    />
-                </Box>
-            </>
+            </Box>
         )
     }, [users, usersLoading]);
 
     return (
         <>
-            <UserList />
-            <PrimaryModal
-                title={"Add User"}
-                modalOpened={modalOpen}
-                onClose={onClose}
-                onSubmit={addUserHandler}
-                children={<AddUser userConfig={userConfig} setUserConfig={setUserConfig} />}
+            <Header
+                title="Manage Users"
             />
+            <UserList />
         </>
     );
 };

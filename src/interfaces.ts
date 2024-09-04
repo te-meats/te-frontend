@@ -13,8 +13,9 @@ export interface Auth {
 }
 
 export interface UserState {
-    id: number,
+    id: string,
     username: string,
+    password: string, 
     email: string,
     first_name: string,
     last_name: string,
@@ -29,6 +30,24 @@ export interface AuthState {
 export interface CreateUserConfig {
     username: string,
     password: string,
+}
+
+export interface UpdateUserConfig {
+    id: string,
+    username?: string,
+    first_name?: string,
+    last_name?: string,
+    email?: string,
+    phone_number?: string,
+}
+
+export interface UpdateUserPassword {
+    id: string,
+    password: string,
+}
+
+export interface DeleteConfig {
+    id: string,
 }
 
 export interface UserFormData {
