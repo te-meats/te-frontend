@@ -1,20 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@hooks/hooks"
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { fetchCustomers } from "@actions/customers";
+import { createCustomer, deleteCustomer, fetchCustomers, updateCustomer } from "@actions/customers";
 import Header from "@components/Header";
-import { Box } from "@mui/material";
-import PrimaryModal from "@components/Modals/PrimaryModal";
-import AddCustomer from "./Forms/AddCustomer";
-
-const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'first_name', headerName: 'First Name', width: 130 },
-    { field: 'last_name', headerName: 'Last Name', width: 130 },
-    { field: 'address', headerName: 'Address', width: 200 },
-    { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'phone', headerName: 'Phone Number', width: 130 },
-]
+import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip } from "@mui/material";
+import { MaterialReactTable, MRT_ColumnDef, MRT_EditActionButtons, MRT_EditCellTextField, MRT_Row, MRT_TableOptions, useMaterialReactTable } from "material-react-table";
+import { Customer } from "src/interfaces";
+import { Delete, Edit } from "@mui/icons-material";
 
 const Customers = () => {
     const dispatch = useAppDispatch();
@@ -22,44 +13,152 @@ const Customers = () => {
     const customersLoading = useAppSelector(state => state.customers.pending);
     const customers = useAppSelector(state => state.customers.customers);
 
-    const [modalOpen, setModalOpen] = useState(false);
-
     useEffect(() => {
         dispatch(fetchCustomers());
     }, []);
 
-    const addCustomerHandler = () => {
-        // TODO: Implement functionality
-        setModalOpen(true);
+    const handleCreateCustomer: MRT_TableOptions<Customer>['onCreatingRowSave'] = ({ values, table }) => {
+        dispatch(createCustomer(values));
+        table.setCreatingRow(null);
     };
 
-    const onClose = () => {
-        setModalOpen(false);
-    }
+    const handleEditCustomer: MRT_TableOptions<Customer>['onEditingRowSave'] = ({ values, table }) => {
+        dispatch(updateCustomer(values))
+        table.setEditingRow(null);
+    };
+
+    const handleDeleteCustomer = (row: MRT_Row<Customer>) => {
+        dispatch(deleteCustomer(row));
+    }  
+
+    const columns = useMemo<MRT_ColumnDef<Customer>[]>(() => [
+        {
+            accessorKey: 'id',
+            header: 'Id',
+            enableEditing: false,
+            visibleInShowHideMenu: false,
+        },
+        {
+            accessorKey: 'first_name',
+            header: 'First Name',
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'last_name',
+            header: 'Last Name',
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'address',
+            header: 'Address',
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'email',
+            header: 'Email',
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'phone',
+            header: 'Phone Number',
+            enableHiding: false,
+        },
+    ], [])
+
+    const table = useMaterialReactTable({
+        columns,
+        data: customers,
+        enableGlobalFilter: true,
+        createDisplayMode: 'modal',
+        editDisplayMode: 'modal',
+        enableRowActions: true,
+        positionActionsColumn: 'last',
+        onCreatingRowSave: handleCreateCustomer,
+        onEditingRowSave: handleEditCustomer,
+        getRowId: (row) => row.id,
+        renderRowActions: ({ row, table }) => (
+            <Box sx={{ display: 'flex', gap: '1rem' }}>
+                <Tooltip title="Edit">
+                    <IconButton onClick={() => table.setEditingRow(row)}>
+                        <Edit />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete">
+                    <IconButton onClick={() => handleDeleteCustomer(row)}>
+                        <Delete />
+                    </IconButton>
+                </Tooltip>
+            </Box> 
+        ),
+        renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
+            <>
+                <DialogTitle variant="h3">Create New Customer</DialogTitle>
+                <DialogContent
+                    sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+                >
+                    {internalEditComponents}
+                </DialogContent>
+                <DialogActions>
+                    <MRT_EditActionButtons variant="text" table={table} row={row} />
+                </DialogActions>
+            </>
+        ),
+        renderEditRowDialogContent: ({ table, row }) => {
+            return (
+            <>
+                <DialogTitle variant="h3">Edit Customer</DialogTitle>
+                <DialogContent
+                    sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+                >
+                    {
+                        row.getAllCells()
+                        .filter((cell) => cell.column.id !== 'password')
+                        .map((cell) => (
+                            <MRT_EditCellTextField 
+                                cell={cell}
+                                key={cell.id}
+                                table={table}
+                            />
+                        ))
+                    }
+                </DialogContent>
+                <DialogActions>
+                    <MRT_EditActionButtons variant="text" table={table} row={row} />
+                </DialogActions>
+            </>
+        )},
+        renderTopToolbarCustomActions: ({ table }) => (
+            <Button
+                variant="contained"
+                onClick={() => {
+                    table.setCreatingRow(true);
+                }}
+            >
+                Create New Customer
+            </Button>
+        ),
+        state: {
+            columnVisibility: { id: false, password: false } ,
+            isLoading: customersLoading,
+        }
+    });
+
+    const CustomerList = useCallback(() => {
+        return (
+            <Box className="container-content">
+                <MaterialReactTable 
+                    table={table}
+                />
+            </Box>
+        )
+    }, [customers, customersLoading]);
 
     return (
         <>
             <Header
                 title="Customers"
-                actionTitle="Add new Customer"
-                actions={addCustomerHandler}
             />
-            <Box className="container-content">
-                <DataGrid 
-                    rows={customers}
-                    columns={columns}
-                    checkboxSelection
-                    loading={customersLoading}
-                    autoHeight={true}
-                />
-            </Box>
-            <PrimaryModal
-                title={"Add Customer"}
-                modalOpened={modalOpen}
-                onClose={onClose}
-                onSubmit={() => {}}
-                children={<AddCustomer />}
-            />
+            <CustomerList />
         </>
     )
 }

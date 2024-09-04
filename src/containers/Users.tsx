@@ -1,8 +1,8 @@
 import { createUser, deleteUser, fetchUsers, updateUser } from "@actions/users";
 import Header from "@components/Header";
 import { useAppDispatch, useAppSelector } from "@hooks/hooks";
-import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, TextField, Tooltip } from "@mui/material";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip } from "@mui/material";
+import { useCallback, useEffect, useMemo } from "react";
 import { UserState } from "src/interfaces";
 import { MaterialReactTable, MRT_EditActionButtons, MRT_EditCellTextField, MRT_Row, MRT_TableOptions, useMaterialReactTable, type MRT_ColumnDef } from "material-react-table";
 import { Delete, Edit } from "@mui/icons-material";
