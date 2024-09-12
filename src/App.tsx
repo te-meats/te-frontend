@@ -8,6 +8,8 @@ import CuttingInstructions from '@containers/CuttingInstructions';
 import Users from '@containers/Users';
 import '@assets/App.scss'
 import Calendar from '@containers/Calendar';
+import Producers from '@containers/Producers';
+import WeightStation from '@containers/WeightStation';
 
 function App() {
 
@@ -37,6 +39,18 @@ function App() {
             path="/customers"
             element={
               <Dashboard component={<Customers />} />
+            }
+          />
+          <Route 
+            path="/producers"
+            element={
+              <Dashboard component={<Producers />} />
+            }
+          />
+          <Route 
+            path="/weight-station"
+            element={
+              <Dashboard component={<WeightStation />} />
             }
           />
           <Route 
