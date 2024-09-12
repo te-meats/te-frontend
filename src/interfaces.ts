@@ -16,6 +16,8 @@ export interface Auth {
 
 export interface SchedulerState {
     events: Array<ProcessedEvent>,
+    pending: boolean,
+    error: string,
 }
 
 export interface CreateSchedulerEventConfig {
