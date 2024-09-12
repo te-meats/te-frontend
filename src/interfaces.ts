@@ -14,6 +14,10 @@ export interface Auth {
     token: string,
 }
 
+export interface SchedulerState {
+    events: Array<ProcessedEvent>,
+}
+
 export interface CreateSchedulerEventConfig {
     title: string,
     start: Date,
@@ -27,12 +31,40 @@ export interface UpdateSchedulerEventConfig {
     end?: Date,
 }
 
+export interface WeightStation {
+    live_weight: number,
+}
+
+export interface Producer {
+    id: string,
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string,
+}
+
 export interface Customer {
     id: string,
     first_name: string,
     last_name: string,
     email: string,
     phone: string,
+}
+
+export interface CreateProducerConfig {
+    id: string,
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string,
+}
+
+export interface UpdateProducerConfig {
+    id: string,
+    first_name?: string,
+    last_name?: string,
+    email?: string,
+    phone?: string,
 }
 
 export interface CreateCustomerConfig {
@@ -51,8 +83,14 @@ export interface UpdateCustomerConfig {
     phone?: string,
 }
 
-export interface SchedulerState {
-    events: Array<ProcessedEvent>,
+export interface WeightStationState {
+    weightStation: WeightStation,
+    pending: boolean,
+    error: string,
+}
+
+export interface ProducerState {
+    producers: Array<Producer>,
     pending: boolean,
     error: string,
 }
