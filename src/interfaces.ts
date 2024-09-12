@@ -1,3 +1,5 @@
+import { ProcessedEvent } from "@aldabil/react-scheduler/types";
+
 export interface UserConfig {
     username: string,
     email: string,
@@ -10,6 +12,23 @@ export interface LoginConfig {
 
 export interface Auth {
     token: string,
+}
+
+export interface SchedulerState {
+    events: Array<ProcessedEvent>,
+}
+
+export interface CreateSchedulerEventConfig {
+    title: string,
+    start: Date,
+    end: Date,
+}
+
+export interface UpdateSchedulerEventConfig {
+    id: string,
+    title?: string,
+    start?: Date,
+    end?: Date,
 }
 
 export interface WeightStation {
