@@ -12,12 +12,40 @@ export interface Auth {
     token: string,
 }
 
+export interface WeightStation {
+    live_weight: number,
+}
+
+export interface Producer {
+    id: string,
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string,
+}
+
 export interface Customer {
     id: string,
     first_name: string,
     last_name: string,
     email: string,
     phone: string,
+}
+
+export interface CreateProducerConfig {
+    id: string,
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string,
+}
+
+export interface UpdateProducerConfig {
+    id: string,
+    first_name?: string,
+    last_name?: string,
+    email?: string,
+    phone?: string,
 }
 
 export interface CreateCustomerConfig {
@@ -34,6 +62,18 @@ export interface UpdateCustomerConfig {
     last_name?: string,
     email?: string,
     phone?: string,
+}
+
+export interface WeightStationState {
+    weightStation: WeightStation,
+    pending: boolean,
+    error: string,
+}
+
+export interface ProducerState {
+    producers: Array<Producer>,
+    pending: boolean,
+    error: string,
 }
 
 export interface CustomerState {
