@@ -1,5 +1,6 @@
 import Header from "@components/Header";
-import { Box, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { Box } from "@mui/material";
+import Pork from "./cuttingInstructions/Pork";
 
 const CuttingInstructions = () => {
     return (
@@ -8,13 +9,7 @@ const CuttingInstructions = () => {
                 title="Cutting Instructions"
             />
             <Box className="container-content">
-                <FormControl>
-                    <FormLabel id="radio-buttons-group-label">Shoulder</FormLabel>
-                    <RadioGroup>
-                        <FormControlLabel value="Picnic Roast" control={<Radio />} label="Picnic Roast" />
-                        <FormControlLabel value="Roast" control={<Radio />} label="Roast" />
-                    </RadioGroup>
-                </FormControl>
+                <Pork />
             </Box>
         </>
     );
