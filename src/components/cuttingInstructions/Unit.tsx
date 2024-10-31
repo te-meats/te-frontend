@@ -1,12 +1,27 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
+import {PrepOption} from "../../interfaces.ts";
 
 interface UnitProps {
-    name: string,
-    visible?: string,
-    handleUnitChange: (e: SelectChangeEvent<string>) => void
+    name: string
+    visible?: string
+    handleUnitChange: (primalIndex: number, cutIndex: number, cutTypeIndex: number, prepTypeIndex: number, unitIndex: number) => void
+    options: Array<PrepOption>
+    primalIndex: number
+    cutIndex: number
+    cutTypeIndex: number
+    prepTypeIndex: number
+    unitIndex: number
 }
 
 const Unit = (props: UnitProps) => {
+    const handleChange = (e: SelectChangeEvent<number>) => {
+        props.handleUnitChange(props.primalIndex, props.cutIndex, props.cutTypeIndex, Number(e.target.value), 0);
+    }
+
+    const handleUnitChange = (e: SelectChangeEvent) => {
+        props.handleUnitChange(props.primalIndex, props.cutIndex, props.cutTypeIndex, props.prepTypeIndex, Number(e.target.value));
+    }
+
     return (
         <>
             {props.name === props.visible && (
@@ -18,13 +33,19 @@ const Unit = (props: UnitProps) => {
                             id="demo-simple-select"
                             label="Preparation"
                             name={props.name}
-                            defaultValue={props.name}
-                            value={props.name}
-                            onChange={props.handleUnitChange}
+                            defaultValue={props.prepTypeIndex}
+                            value={props.prepTypeIndex}
+                            onChange={handleChange}
                         >
-                            <MenuItem value={"Roast"}>Roast</MenuItem>
-                            <MenuItem value={"Steak"}>Steak</MenuItem>
-                            <MenuItem value={"Kebab"}>Kebab</MenuItem>
+                            {
+                                props.options.map((option, i) =>
+                                    <MenuItem
+                                        key={i}
+                                        value={i}
+                                    >
+                                        {option.value}
+                                    </MenuItem>)
+                            }
                         </Select>
                     </FormControl>
                     <FormControl fullWidth>
@@ -32,13 +53,20 @@ const Unit = (props: UnitProps) => {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            label="Age"
-                            value={10}
-                            // onChange={handleChange}
+                            label="Unit"
+                            defaultValue={props.unitIndex}
+                            value={props.unitIndex}
+                            onChange={handleUnitChange}
                         >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
+                            {
+                                props.options[props.prepTypeIndex].units.map((unit, i) =>
+                                    <MenuItem
+                                        key={i}
+                                        value={i}
+                                    >
+                                        {unit}
+                                    </MenuItem>)
+                            }
                         </Select>
                     </FormControl>
                 </>

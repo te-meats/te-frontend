@@ -1,11 +1,11 @@
-import { FormControl, FormLabel, RadioGroup } from "@mui/material";
-import { ReactNode } from "react";
+import {FormControl, FormLabel, RadioGroup} from "@mui/material";
+import React, {ReactNode} from "react";
 
 interface PrepRadioGroup {
     children: ReactNode
-    onChange: (e: React.ChangeEvent<HTMLInputElement>, primalKey: string, cutKey: string) => void
-    primalKey: string
-    cutKey: string
+    onChange: (e: React.ChangeEvent<HTMLInputElement>, primalIndex: number, cutIndex: number) => void
+    primalIndex: number
+    cutIndex: number
 }
 
 
@@ -14,8 +14,8 @@ const PrepRadioGroup = (props: PrepRadioGroup) => {
         <>
             <FormControl>
                 <FormLabel id="radio-buttons-group-label">Cut</FormLabel>
-                <RadioGroup onChange={(e) => props.onChange(e, props.primalKey, props.cutKey)}>
-                    { props.children }
+                <RadioGroup onChange={(e) => props.onChange(e, props.primalIndex, props.cutIndex)}>
+                    {props.children}
                 </RadioGroup>
             </FormControl>
         </>

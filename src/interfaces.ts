@@ -141,6 +141,30 @@ export interface DeleteConfig {
     id: string,
 }
 
+export interface PrepOption {
+    value: string
+    selectedQuantityIndex: number
+    units: Array<string>
+}
+
+export interface CutOption {
+    value: string
+    selectedPrepOptionIndex: number
+    prepTypes: Array<PrepOption>
+}
+
+export interface Cut {
+    value: string
+    selectedCutTypeIndex: string
+    cutTypes: Array<CutOption>
+}
+
+export interface PrimalType {
+    value: string
+    cuts: Array<Cut>
+}
+
+
 export interface UserFormData {
     userConfig: CreateUserConfig,
     setUserConfig: React.Dispatch<React.SetStateAction<CreateUserConfig>>,
