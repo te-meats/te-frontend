@@ -4,6 +4,7 @@ import PrepTypeRadioOption from "@components/cuttingInstructions/PrepTypeRadioOp
 import Primal from "@components/cuttingInstructions/Primal";
 import React, {useState} from "react";
 import {PrimalType} from "src/interfaces";
+import {porkInstructionFormData} from "../../formData.ts";
 
 const Pork = () => {
     interface DoneChecklist {
@@ -11,63 +12,7 @@ const Pork = () => {
     }
 
     // TODO: Fetch this initial data from the backend
-    const [porkInstructions, setPorkInstructions] = useState<Array<PrimalType>>([
-        {
-            value: "shoulder",
-            cuts: [
-                {
-                    value: "bostonButt",
-                    selectedCutTypeIndex: "",
-                    cutTypes: [
-                        {
-                            value: "boneless",
-                            selectedPrepOptionIndex: 0,
-                            prepTypes: [
-                                {
-                                    value: "steaks",
-                                    selectedQuantityIndex: 0,
-                                    units: ["1 slice", "2 slices", "4 slices"]
-                                },
-                            ],
-                        },
-                        {
-                            value: "bone-in",
-                            selectedPrepOptionIndex: 0,
-                            prepTypes: [
-                                {
-                                    value: "roast",
-                                    selectedQuantityIndex: 0,
-                                    units: ["whole", "half",]
-                                },
-                                {
-                                    value: "steaks",
-                                    selectedQuantityIndex: 0,
-                                    units: ["1 slice", "2 slices", "4 slices"]
-                                },
-                            ],
-                        },
-                    ],
-                },
-                {
-                    value: "backBone",
-                    selectedCutTypeIndex: "",
-                    cutTypes: [
-                        {
-                            value: "bone-in",
-                            selectedPrepOptionIndex: 0,
-                            prepTypes: [
-                                {
-                                    value: "steaks",
-                                    selectedQuantityIndex: 0,
-                                    units: ["1 slice", "2 slices", "4 slices"]
-                                },
-                            ],
-                        },
-                    ],
-                },
-            ]
-        },
-    ]);
+    const [porkInstructions, setPorkInstructions] = useState<Array<PrimalType>>(porkInstructionFormData);
 
     const [doneChecklist, setDoneChecklist] = useState<DoneChecklist>();
 
