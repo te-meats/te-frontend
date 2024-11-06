@@ -8,7 +8,8 @@ import {
    updateProducer,
 } from "@actions/producers";
 import Header from "@components/Header";
-import EntityTable from "@components/EntityTable";
+import Table from "@components/Table.tsx";
+import { Box } from "@mui/material";
 
 const Producers = () => {
    const dispatch = useAppDispatch();
@@ -36,16 +37,16 @@ const Producers = () => {
    return (
       <>
          <Header title="Producers" />
-         <EntityTable
-            data={producers}
-            dispatchCreateEntity={createProducer}
-            dispatchUpdateEntity={updateProducer}
-            dispatchDeleteEntity={(id) =>
-               dispatch(deleteProducer({ id: String(id) }))
-            }
-            columnsDef={columns}
-            isLoading={producersLoading}
-         />
+         <Box className={"container-content"}>
+            <Table
+                data={producers}
+                dispatchCreateEntity={(customer) => dispatch(createProducer(customer))}
+                dispatchUpdateEntity={(customer) => dispatch(updateProducer(customer))}
+                dispatchDeleteEntity={(id) => dispatch(deleteProducer({ id: String(id) }))}
+                columnsDef={columns}
+                isLoading={producersLoading}
+            />
+         </Box>
       </>
    );
 };

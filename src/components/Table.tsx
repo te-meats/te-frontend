@@ -1,5 +1,5 @@
 // src/components/EntityTable.tsx
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import {
    Box,
    Button,
@@ -22,46 +22,44 @@ import {
 import { Delete, Edit } from "@mui/icons-material";
 
 // Ensure Entity extends MRT_RowData which is necessary for Material React Table functions
-interface EntityTableProps<
-   Entity extends MRT_RowData & { id: string | number }
-> {
-   data: Entity[];
-   dispatchCreateEntity: (values: Entity) => void;
-   dispatchUpdateEntity: (values: Entity) => void;
+interface EntityTableProps<T extends MRT_RowData> {
+   data: T[];
+   dispatchCreateEntity: (values: T) => void;
+   dispatchUpdateEntity: (values: T) => void;
    dispatchDeleteEntity: (id: number | string) => void;
-   columnsDef: MRT_ColumnDef<Entity>[];
+   columnsDef: MRT_ColumnDef<T>[];
    isLoading: boolean;
 }
 
-function EntityTable<Entity extends MRT_RowData & { id: string | number }>({
+function Table<T extends MRT_RowData>({
    data,
    dispatchCreateEntity,
    dispatchUpdateEntity,
    dispatchDeleteEntity,
    columnsDef,
    isLoading,
-}: EntityTableProps<Entity>) {
-   const handleCreateEntity: MRT_TableOptions<Entity>["onCreatingRowSave"] = ({
+}: EntityTableProps<T>) {
+   const handleCreateEntity: MRT_TableOptions<T>["onCreatingRowSave"] = ({
       values,
       table,
    }) => {
-      dispatchCreateEntity(values as Entity);
+      dispatchCreateEntity(values as T);
       table.setCreatingRow(null);
    };
 
-   const handleEditEntity: MRT_TableOptions<Entity>["onEditingRowSave"] = ({
+   const handleEditEntity: MRT_TableOptions<T>["onEditingRowSave"] = ({
       values,
       table,
    }) => {
-      dispatchUpdateEntity(values as Entity);
+      dispatchUpdateEntity(values as T);
       table.setEditingRow(null);
    };
 
-   const handleDeleteEntity = (row: MRT_Row<Entity>) => {
+   const handleDeleteEntity = (row: MRT_Row<T>) => {
       dispatchDeleteEntity(row.original.id);
    };
 
-   const columns = useMemo(() => columnsDef, [columnsDef]);
+   const columns = useMemo<MRT_ColumnDef<T>[]>(() => columnsDef, [columnsDef]);
 
    const table = useMaterialReactTable({
       columns,
@@ -73,7 +71,7 @@ function EntityTable<Entity extends MRT_RowData & { id: string | number }>({
       positionActionsColumn: "last",
       onCreatingRowSave: handleCreateEntity,
       onEditingRowSave: handleEditEntity,
-      getRowId: (row) => row.id.toString(),
+      getRowId: (row) => row.id,
       renderRowActions: ({ row, table }) => (
          <Box sx={{ display: "flex", gap: "1rem" }}>
             <Tooltip title="Edit">
@@ -146,11 +144,17 @@ function EntityTable<Entity extends MRT_RowData & { id: string | number }>({
       },
    });
 
+   const RenderTable = useCallback(() => {
+      return (
+          <MaterialReactTable
+              table={table}
+          />
+      )
+   }, [table]);
+
    return (
-      <Box className="container-content">
-         <MaterialReactTable table={table} />
-      </Box>
+       <RenderTable />
    );
 }
 
-export default EntityTable;
+export default Table;
