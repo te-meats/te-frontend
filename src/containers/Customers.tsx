@@ -7,7 +7,8 @@ import {
    updateCustomer,
 } from "@actions/customers";
 import Header from "@components/Header";
-import EntityTable from "@components/EntityTable";
+import Table from "@components/Table.tsx";
+import { Box } from "@mui/material";
 
 const Customers = () => {
    const dispatch = useAppDispatch();
@@ -35,14 +36,16 @@ const Customers = () => {
    return (
       <>
          <Header title="Customers" />
-         <EntityTable
-            data={customers}
-            dispatchCreateEntity={createCustomer}
-            dispatchUpdateEntity={updateCustomer}
-            dispatchDeleteEntity={(id) => dispatch(deleteCustomer({ id: String(id) }))}
-            columnsDef={columns}
-            isLoading={customersLoading}
-         />
+         <Box className={"container-content"}>
+            <Table
+                data={customers}
+                dispatchCreateEntity={(customer) => dispatch(createCustomer(customer))}
+                dispatchUpdateEntity={(customer) => dispatch(updateCustomer(customer))}
+                dispatchDeleteEntity={(id) => dispatch(deleteCustomer({ id: String(id) }))}
+                columnsDef={columns}
+                isLoading={customersLoading}
+            />
+         </Box>
       </>
    );
 };
