@@ -1,105 +1,67 @@
-import Cut from "@components/cuttingInstructions/Cut";
-import PrepRadioGroup from "@components/cuttingInstructions/PrepRadioGroup";
-import PrepTypeRadioOption from "@components/cuttingInstructions/PrepTypeRadioOption";
 import Primal from "@components/cuttingInstructions/Primal";
-import React, {useState} from "react";
-import {PrimalType} from "src/interfaces";
-import {porkInstructionFormData} from "../../formData.ts";
+import { useEffect, useState } from "react";
+import { CutSheetFormData, CutSheetState, PrimalFormData } from "src/interfaces";
+import { porkInstructionFormData } from "../../formData.ts";
 
 const Pork = () => {
-    interface DoneChecklist {
-        [key: string]: boolean
-    }
-
     // TODO: Fetch this initial data from the backend
-    const [porkInstructions, setPorkInstructions] = useState<Array<PrimalType>>(porkInstructionFormData);
+    const [porkInstructions, setPorkInstructions] = useState<CutSheetFormData>(porkInstructionFormData);
 
-    const [doneChecklist, setDoneChecklist] = useState<DoneChecklist>();
+    const [data, setData] = useState<CutSheetState>({
+        primals: [],
+    });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, primalIndex: number, cutIndex: number) => {
-        const updatedInstructions = porkInstructions;
-        updatedInstructions[primalIndex].cuts[cutIndex] = {
-            ...updatedInstructions[primalIndex].cuts[cutIndex],
-            selectedCutTypeIndex: e.target.value,
-        }
-        setPorkInstructions([
-            ...updatedInstructions,
-        ]);
-    };
-
-    const handlePrepTypeChange = (primalIndex: number, cutIndex: number, cutTypeIndex: number, selectedPrepOptionIndex: number, selectedQuantityIndex: number) => {
-        const updatedInstructions = porkInstructions;
-        updatedInstructions[primalIndex].cuts[cutIndex].cutTypes[cutTypeIndex] = {
-            ...updatedInstructions[primalIndex].cuts[cutIndex].cutTypes[cutTypeIndex],
-            selectedPrepOptionIndex: selectedPrepOptionIndex,
+    useEffect(() => {
+        const newData: CutSheetState = {
+            primals: []
         };
+        newData.primals = porkInstructionFormData.primals.map(primal => (
+            {
+                id: primal.id,
+                primal: primal.name,
+                cuts: primal.cuts.map(cut => {
+                    const prepOptionIndex = cut.cutTypes[cut.cutTypeIndex].selectedPrepOptionIndex;
+                    const quantityIndex = cut.cutTypes[cut.cutTypeIndex].prepTypes[prepOptionIndex].selectedQuantityIndex;
+                    return ({
+                        id: cut.id,
+                        cut: cut.name,
+                        cutType: cut.cutTypes[cut.cutTypeIndex].name,
+                        prepType: cut.cutTypes[cut.cutTypeIndex].prepTypes[prepOptionIndex].name,
+                        quantity: cut.cutTypes[cut.cutTypeIndex].prepTypes[prepOptionIndex].quantities[quantityIndex],
+                    })
+                })
+            }
+        ));
+        setData(newData);
+    }, [])
 
-        updatedInstructions[primalIndex].cuts[cutIndex].cutTypes[cutTypeIndex].prepTypes[selectedPrepOptionIndex] = {
-            ...updatedInstructions[primalIndex].cuts[cutIndex].cutTypes[cutTypeIndex].prepTypes[selectedPrepOptionIndex],
-            selectedQuantityIndex: selectedQuantityIndex,
-        };
+    const handleChange = (primal: PrimalFormData) => {
+        const updatedPrimals = data?.primals.map(originalPrimal => {
+            if (primal.id === originalPrimal.id) {
+                return primal;
+            } else {
+                return originalPrimal;
+            }
+        });
 
-        setPorkInstructions([
-            ...updatedInstructions,
-        ]);
+        setData({
+            ...data,
+            primals: updatedPrimals,
+        });
+        console.log(primal.cuts);
     }
-
-    // TODO: Rework this useEffect
-    // useEffect(() => {
-    //     let newChecklist = doneChecklist;
-    //     for (const [key] of Object.entries(porkIns)) {
-    //         for (const [key1] of Object.entries(porkIns[key])) {
-    //             if (porkIns[key][key1].done) {
-    //                 newChecklist = {
-    //                     ...newChecklist,
-    //                     [key]: true,
-    //                 }
-    //             } else {
-    //                 newChecklist = {
-    //                     ...newChecklist,
-    //                     [key]: false,
-    //                 }
-    //             }
-    //         }
-    //     }
-    //
-    //     setDoneChecklist(newChecklist);
-    // }, [porkIns])
 
     return (
         <>
-            {porkInstructions && (
-                porkInstructions.map((porkIns, primalIndex) => {
-                    return (
-                        <Primal name={porkIns.value} key={`primal-${primalIndex}`}>
-                            {porkIns.cuts.map((cut, cutIndex) =>
-                                <Cut name={cut.value} key={`cut-${cutIndex}`}>
-                                    <PrepRadioGroup
-                                        onChange={handleChange}
-                                        primalIndex={primalIndex}
-                                        cutIndex={cutIndex}
-                                    >
-                                        {cut.cutTypes.map((cutType, cutTypeIndex) =>
-                                            <PrepTypeRadioOption
-                                                key={`cutType-${cutTypeIndex}`}
-                                                selected={cut.selectedCutTypeIndex}
-                                                name={cutType.value}
-                                                options={cutType.prepTypes}
-                                                onUnitChange={handlePrepTypeChange}
-                                                primalIndex={primalIndex}
-                                                cutIndex={cutIndex}
-                                                cutTypeIndex={cutTypeIndex}
-                                                selectedPrepTypeIndex={cutType.selectedPrepOptionIndex}
-                                                selectedUnitIndex={cutType.prepTypes[cutType.selectedPrepOptionIndex].selectedQuantityIndex}
-                                            />
-                                        )}
-                                    </PrepRadioGroup>
-                                </Cut>
-                            )}
-                        </Primal>
-                    )
-                }))
-            }
+            {porkInstructionFormData.primals.map(primalForm => {
+                return (
+                    <Primal key={primalForm.id}
+                            primalForm={primalForm}
+                            onChange={handleChange}
+                            primalState={data.primals[primalForm.id]}
+                    />
+                );
+            })}
         </>
     );
 };

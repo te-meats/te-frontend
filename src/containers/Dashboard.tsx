@@ -7,7 +7,7 @@ type Props = {
     component: ReactNode,
 }
 
-const Dashboard = ({ component } : Props) => {
+const Dashboard = ({ component }: Props) => {
     return (
         <Grid container>
             <Grid xs={12} md={2}>
