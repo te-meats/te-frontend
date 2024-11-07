@@ -32,11 +32,10 @@ const WeightStation = () => {
     const handleBackStep = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
-
+    // unused
     const onSelectCustomer = (event: SelectChangeEvent<string | number>) => {
         setFormData({ ...formData, customer: event.target.value as string | number });
     };
-    // unused
     const onDetailsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     };
